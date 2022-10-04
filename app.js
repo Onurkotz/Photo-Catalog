@@ -4,7 +4,12 @@ const ejs = require('ejs');
 
 const app = express();
 
+// Tempelate engine for dynamic files.
+
 app.set('view engine', 'ejs');
+
+
+// For create a server.
 
 app.use(express.static('public'));
 
