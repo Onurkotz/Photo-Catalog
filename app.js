@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 // File upload:
 const fileUpload = require('express-fileupload');
+// Manipulating POST method for as PUT and DELETE
+const methodOverride = require('method-override');
 
 //Create a image file for database image.
 const fs = require('fs');
@@ -29,9 +31,10 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
-// File upload
+// File upload. encType="multipart/form-data" is necessary for uploads. Add this <form>.
 app.use(fileUpload());
-// encType="multipart/form-data" is necessary for uploads. Add this <form>.
+
+app.use(methodOverride('_method'));
 
 // ROUTES
 
@@ -51,11 +54,17 @@ app.get('/add', (req, res) => {
   res.render('add');
 });
 
+app.get('/photos/edit/:id', async (req, res) => {
+  const photo = await Photo.findOne({ _id: req.params.id });
+  res.render('edit', {
+    photo,
+  });
+});
+
 app.post('/photos', async (req, res) => {
   // Create data. "/photos" is action name of form. /image is name that necessary for file upload
   //console.log(req.files.image); this is for getting image detail
-
-  const uploadDir = 'public/uploads';
+    const uploadDir = 'public/uploads';
 
   if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir);
@@ -81,12 +90,17 @@ app.get('/photo/:id', async (req, res) => {
   });
 });
 
-// app.delete('/delete', async (req, res) => {
-//   // Delete a photo
-//   const photo = await Photo.findById(req.params.id)
-//   await Photo.findByIdAndDelete(photo);
-//   res.redirect('/')
-// });
+app.put('/photos/:id', async (req, res) => {
+  // Update photo. DON'T FORGET THAT IN FORM TAG => action="/photos/<%= photo._id %>?_method=PUT"
+  const photo = await Photo.findOne({ _id: req.params.id });
+  photo.title = req.body.title;
+  photo.description = req.body.description;
+  photo.save();
+
+  
+  res.redirect(`/`); 
+  
+});
 
 // PORT
 
