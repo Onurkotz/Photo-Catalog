@@ -1,13 +1,17 @@
 // CRUD processes with Mongoose
 
 // For to create a database and to connect it.
-const mongoose = require('mongoose');
 
-const Schema = mongoose.Schema;
+// const mongoose = require('mongoose');
+// const Schema = mongoose.Schema;
 
-// Connect database
 
-mongoose.connect('mongodb://localhost/pcat-test-db');
+
+// Connect databas
+
+// mongoose.connect('mongodb://localhost/pcat-test-db');
+
+
 
 //  "pcat-test-db is" database name. In here, if you get any warning of "deprecation",
 // add these:
@@ -15,17 +19,23 @@ mongoose.connect('mongodb://localhost/pcat-test-db');
 //  useUnifiedTopology: true
 //  after 'mongodb://localhost/pcat-test-db'
 
+
+
 // Create a Schema
 
-const PhotoSchema = new Schema({
-  title: String,
-  description: String,
-});
+// const PhotoSchema = new Schema({
+//   title: String,
+//   description: String,
+// });
+
+
 
 // Create model (Model uses schema.)
 
-const Photo = mongoose.model('Photo', PhotoSchema);
+// const Photo = mongoose.model('Photo', PhotoSchema);
 // Mongo takes "Photo". Then minimizes and makes plural it. "photos". This is out collection name.
+
+
 
 // Create a photo
 
@@ -34,11 +44,15 @@ const Photo = mongoose.model('Photo', PhotoSchema);
 //   description: 'First Data',
 // });
 
+
+
 // Read a photo
 
 // Photo.find({}, (err, data) => {
 //   console.log(data);
 // });  // {} includes filter consitions.
+
+
 
 // Update a photos
 
@@ -57,6 +71,8 @@ const Photo = mongoose.model('Photo', PhotoSchema);
 //     console.log(data);
 //   }
 // );
+
+
 
 // Delete a PhotoSchema
 

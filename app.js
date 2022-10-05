@@ -1,11 +1,18 @@
 const express = require('express');
+const mongoose = require('mongoose');
+
 const path = require('path');
 const ejs = require('ejs');
 
+const Photo = require('./models/Photo');
+
 const app = express();
 
-// Tempelate engine for dynamic files.
 
+//Connecting database
+mongoose.connect('mongodb://localhost/pcat-test-db')
+
+// Tempelate engine for dynamic files.
 app.set('view engine', 'ejs');
 
 // MIDDLEWARES
@@ -18,9 +25,11 @@ app.use(express.urlencoded({ extend: true }));
 app.use(express.json());
 
 // Routes
-
-app.get('/', (req, res) => {
-  res.render('index');
+app.get('/', async (req, res) => {
+  const photos = await Photo.find({})
+  res.render('index', {
+    photos
+  });
 });
 app.get('/about', (req, res) => {
   res.render('about');
@@ -28,14 +37,14 @@ app.get('/about', (req, res) => {
 app.get('/add', (req, res) => {
   res.render('add');
 });
-
-app.post('/photos', (req, res) => {
-  console.log(req.body);
+app.post('/photos', async (req, res) => {
+  await Photo.create(req.body);
   res.redirect('/')
 });
 
-const port = 3000;
 
+
+const port = 3000;
 app.listen(port, () => {
   console.log(`Sunucu ${port} ile başlatıldı.`);
 });
