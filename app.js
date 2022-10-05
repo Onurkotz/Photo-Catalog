@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 // File upload:
 const fileUpload = require('express-fileupload');
 
+//Create a image file for database image.
+const fs = require('fs');
 const path = require('path');
 const ejs = require('ejs');
 
@@ -35,7 +37,7 @@ app.use(fileUpload());
 
 app.get('/', async (req, res) => {
   // Sending datas to index.
-  const photos = await Photo.find({});
+  const photos = await Photo.find({}).sort('-dateCreated');
   res.render('index', {
     photos,
   });
@@ -52,6 +54,12 @@ app.get('/add', (req, res) => {
 app.post('/photos', async (req, res) => {
   // Create data. "/photos" is action name of form. /image is name that necessary for file upload
   //console.log(req.files.image); this is for getting image detail
+
+  const uploadDir = 'public/uploads';
+
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+  }
 
   let uploadedImage = req.files.image;
   let uploadPath = __dirname + '/public/uploads/' + uploadedImage.name;
