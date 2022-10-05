@@ -41,6 +41,9 @@ app.post('/photos', async (req, res) => {
   await Photo.create(req.body);
   res.redirect('/')
 });
+app.get('/photo', (req, res) => {
+  res.render('photo');
+});
 
 
 
