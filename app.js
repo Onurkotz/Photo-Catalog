@@ -40,25 +40,39 @@ app.get('/', async (req, res) => {
     photos,
   });
 });
+
 app.get('/about', (req, res) => {
   res.render('about');
 });
+
 app.get('/add', (req, res) => {
   res.render('add');
 });
+
 app.post('/photos', async (req, res) => {
-  // Create data. "/photos" is action name of form. /image is name that necessary for file upload.
-  console.log(req.files.image);
-  // await Photo.create(req.body);
-  // res.redirect('/');
+  // Create data. "/photos" is action name of form. /image is name that necessary for file upload
+  //console.log(req.files.image); this is for getting image detail
+
+  let uploadedImage = req.files.image;
+  let uploadPath = __dirname + '/public/uploads/' + uploadedImage.name;
+
+  uploadedImage.mv(uploadPath, async () => {
+    await Photo.create({
+      ...req.body,
+      image: '/uploads/' + uploadedImage.name,
+    });
+    res.redirect('/');
+  });
 });
-// app.get('/photo/:id', async (req, res) => {
-//   // Sending details to details page.
-//   const photo = await Photo.findById(req.params.id);
-//   res.render('photo', {
-//     photo,
-//   });
-// });
+
+app.get('/photo/:id', async (req, res) => {
+  // Sending details to details page.
+  const photo = await Photo.findById(req.params.id);
+  res.render('photo', {
+    photo,
+  });
+});
+
 // app.delete('/delete', async (req, res) => {
 //   // Delete a photo
 //   const photo = await Photo.findById(req.params.id)
