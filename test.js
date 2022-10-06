@@ -5,21 +5,15 @@
 // const mongoose = require('mongoose');
 // const Schema = mongoose.Schema;
 
-
-
 // Connect databas
 
 // mongoose.connect('mongodb://localhost/pcat-test-db');
-
-
 
 //  "pcat-test-db is" database name. In here, if you get any warning of "deprecation",
 // add these:
 //  useNewUrlParser: true,
 //  useUnifiedTopology: true
 //  after 'mongodb://localhost/pcat-test-db'
-
-
 
 // Create a Schema
 
@@ -28,14 +22,10 @@
 //   description: String,
 // });
 
-
-
 // Create model (Model uses schema.)
 
 // const Photo = mongoose.model('Photo', PhotoSchema);
 // Mongo takes "Photo". Then minimizes and makes plural it. "photos". This is out collection name.
-
-
 
 // Create a photo
 
@@ -44,15 +34,11 @@
 //   description: 'First Data',
 // });
 
-
-
 // Read a photo
 
 // Photo.find({}, (err, data) => {
 //   console.log(data);
 // });  // {} includes filter consitions.
-
-
 
 // Update a photos
 
@@ -71,8 +57,6 @@
 //     console.log(data);
 //   }
 // );
-
-
 
 // Delete a PhotoSchema
 
