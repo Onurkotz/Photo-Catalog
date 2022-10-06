@@ -1,4 +1,5 @@
 const express = require('express');
+
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 // File upload:
@@ -10,13 +11,18 @@ const methodOverride = require('method-override');
 const fs = require('fs');
 const path = require('path');
 const ejs = require('ejs');
-
 const Photo = require('./models/Photo');
+
 
 const app = express();
 
+
 //Connecting database
-mongoose.connect('mongodb://localhost/pcat-test-db');
+mongoose.connect('mongodb://localhost/pcat-test-db', {
+  // useNewUrlParser: true,
+  // useUnifiedTopology: true,
+  // useFindAndModify: false,
+});
 
 // Tempelate engine for dynamic files.
 app.set('view engine', 'ejs');
@@ -26,6 +32,8 @@ app.set('view engine', 'ejs');
 // For create a server.
 app.use(express.static('public'));
 
+app.use('app')
+
 // For to end the getting requests. (for POST method) urlcoded captures data in the URL. .json() converts data that captured in the URL to json formot.
 //app.use(express.urlencoded({ extend: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -34,7 +42,13 @@ app.use(express.json());
 // File upload. encType="multipart/form-data" is necessary for uploads. Add this <form>.
 app.use(fileUpload());
 
-app.use(methodOverride('_method'));
+app.use(methodOverride('_method'), {
+  methods: ['POST', 'GET'],
+});
+
+
+
+
 
 // ROUTES
 
@@ -64,7 +78,7 @@ app.get('/photos/edit/:id', async (req, res) => {
 app.post('/photos', async (req, res) => {
   // Create data. "/photos" is action name of form. /image is name that necessary for file upload
   //console.log(req.files.image); this is for getting image detail
-    const uploadDir = 'public/uploads';
+  const uploadDir = 'public/uploads';
 
   if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir);
@@ -96,11 +110,18 @@ app.put('/photos/:id', async (req, res) => {
   photo.title = req.body.title;
   photo.description = req.body.description;
   photo.save();
-
-  
-  res.redirect(`/`); 
-  
+  res.redirect(`/`);
 });
+
+app.delete('/photos/:id', async (req, res) => {
+  // Delete photo. As first remove the photo from folder and then remove it from database.
+  const photo = await Photo.findOne({ _id: req.params.id });
+  let deletedImage = __dirname + '/public' + photo.name;
+  fs.unlinkSync(deletedImage);
+  await Photo.findByIdAndRemove(req.params.id);
+  res.redirect(`/`);
+});
+
 
 // PORT
 
