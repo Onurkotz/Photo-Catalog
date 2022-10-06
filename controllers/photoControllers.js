@@ -65,10 +65,10 @@ exports.updatePhoto = async (req, res) => {
 
 exports.deletePhoto = async (req, res) => {
   const photo = await Photo.findOne({ _id: req.params.id });
-  let deletedImage = __dirname + '/../public' + photo.name;
+  let deletedImage = __dirname + '/../public' + photo.image;
   fs.unlinkSync(deletedImage);
   await Photo.findByIdAndRemove(req.params.id);
-  res.redirect(`/`);
+  res.redirect('/');
 
   // Delete photo. As first remove the photo from folder and then remove it from database. DON'T FORGET THAT IN TAG => action or href="/photos/<%= photo._id %>?_method=DELETE"
 };
