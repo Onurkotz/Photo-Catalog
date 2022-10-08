@@ -10,12 +10,22 @@ const pageController = require('./controllers/pageControllers');
 const app = express();
 
 //Connecting database
-mongoose.connect('mongodb://localhost/pcat-test-db', {
-  // useNewUrlParser: true,
-  // useUnifiedTopology: true,
-  // useFindAndModify: false,
-  //These all 3 are not necessary in new versions.
-});
+mongoose
+  .connect(
+    'mongodb+srv://onurkoc:HT3hLoxlUZtifej6@cluster0.o6sqd4m.mongodb.net/?retryWrites=true&w=majority',
+    {
+      // useNewUrlParser: true,
+      // useUnifiedTopology: true,
+      // useFindAndModify: false,
+      //These all 3 are not necessary in new versions.
+    }
+  )
+  .then(() => {
+    console.log('Database connected.');
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 app.set('view engine', 'ejs'); // Tempelate engine for dynamic files.
 
@@ -46,7 +56,7 @@ app.get('/photos/edit/:id', pageController.getEditPage);
 
 // PORT
 
-const port = 3000;
+const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`Sunucu ${port} ile başlatıldı.`);
 });
