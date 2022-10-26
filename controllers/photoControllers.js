@@ -11,6 +11,7 @@ exports.getAllPhotos = async (req, res) => {
     .sort('-dateCreated')
     .skip((page - 1) * photoPerPage)
     .limit(photoPerPage);
+  console.log(__dirname);
   res.render('index', {
     photos,
     current: page,
@@ -66,9 +67,9 @@ exports.updatePhoto = async (req, res) => {
 
 exports.deletePhoto = async (req, res) => {
   const photo = await Photo.findOne({ _id: req.params.id });
-  let deletedImage = __dirname + '/public' + photo.image;
+  let deletedImage = __dirname + '/../public' + photo.image;
   fs.unlinkSync(deletedImage);
-  await Photo.findByIdAndRemove(req.params.id);
+  await Photo.findByIdAndDelete(req.params.id);
   res.redirect('/');
 
   // Delete photo. As first remove the photo from folder and then remove it from database. DON'T FORGET THAT IN TAG => action or href="/photos/<%= photo._id %>?_method=DELETE"
