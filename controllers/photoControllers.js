@@ -1,5 +1,6 @@
 const Photo = require('../models/Photo');
 const fs = require('fs'); //Create a image file for database image.
+const path = require('path');
 
 exports.getAllPhotos = async (req, res) => {
   // Below code is for pagination.

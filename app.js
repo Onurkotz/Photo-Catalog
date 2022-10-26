@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const fileUpload = require('express-fileupload'); // File upload:
 const methodOverride = require('method-override'); // Manipulating POST method for as PUT and DELETE
 const ejs = require('ejs');
+const path = require('path');
 const photoController = require('./controllers/photoControllers'); // Import controllers
 const pageController = require('./controllers/pageControllers');
 
